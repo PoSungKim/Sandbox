@@ -18,4 +18,9 @@ public class TicketStore extends BaseDomain {
     public void addTicket() {
         this.tickets.add(new Ticket((long) tickets.size(), "Taiwan", STATUS.OPEN));
     }
+
+    @Override
+    public String toString() {
+        return this.tickets.toString();
+    }
 }

@@ -1,6 +1,5 @@
 package fw;
 
-import biz.market.domain.Market;
 import fw.annotation.BizObject;
 
 import java.lang.reflect.InvocationTargetException;
@@ -27,6 +26,9 @@ public class ApplicationContext {
     }
     public Object getObject(Class<?> objectClass) {
         return container.get(objectClass.getSimpleName());
+    }
+    public Map<String, Object> getContainer() {
+        return container;
     }
     @Override
     public String toString() {
