@@ -15,7 +15,6 @@ public class MyOwnFramework {
         postSetup(application);
     }
     private static void preSetup(Class<?> application) {
-
         System.out.printf("\n====================================================================================\n" +
                 "[%s-current thread(%s)] FW : %s is open!" +
                 "\n====================================================================================\n", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")), Thread.currentThread().getName(), application.getSimpleName());
@@ -29,7 +28,6 @@ public class MyOwnFramework {
         System.out.println(applicationContext.getContainer());
     }
     private static void startBiz(Class<?> application) {
-
         System.out.printf("\n====================================================================================\n" +
                 "[%s-current thread(%s)] FW : %s is running!" +
                 "\n====================================================================================\n", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")), Thread.currentThread().getName(), application.getSimpleName());
@@ -42,12 +40,9 @@ public class MyOwnFramework {
         }
     }
     private static void postSetup(Class<?> application) {
-
         System.out.printf("\n====================================================================================\n" +
                 "[%s-current thread(%s)] FW : %s is closed!" +
                 "\n====================================================================================\n", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")), Thread.currentThread().getName(), application.getSimpleName());
-
-        System.out.println(Market.getInstance().getTicketStore());
     }
     private static ApplicationContext createApplicationContext(Class<?> application) {
         return new ApplicationContext(application);

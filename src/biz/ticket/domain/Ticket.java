@@ -21,7 +21,7 @@ public class Ticket extends BaseDomain {
         System.out.printf("[%s-current thread(%s)] BIZ : %s is purchased!\n", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")), Thread.currentThread().getName(), this);
         this.owner = owner;
         this.status = STATUS.CLOSE;
-        System.out.printf("%s is now close\n\n", this);
+        System.out.printf("%s is now closed\n\n", this);
     }
 
     @Override

@@ -47,13 +47,14 @@ public class Market {
                 "\n====================================================================================\n", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")), Thread.currentThread().getName(), this.getClass().getSimpleName());
 
         // 순차 처리
-//        for(Customer customer : customerList) {
-//            customer.purchaseV1();
-//        }
+        //for(Customer customer : customerList) {
+        //    customer.purchaseV1();
+        //}
 
         // 병렬 처리
         for(Customer customer : customerList) {
             Thread customerThread = new Thread(customer);
+
             customerThread.start();
             try {
                 customerThread.join();
@@ -66,8 +67,7 @@ public class Market {
         System.out.printf("\n====================================================================================\n" +
                 "[%s-current thread(%s)] BIZ : %s is closed!" +
                 "\n====================================================================================\n", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")), Thread.currentThread().getName(), this.getClass().getSimpleName());
-//        ticketManager.checkForOpenTicket();
-        new Thread(ticketManager).start();
+        this.ticketManager.checkForOpenTicket();
     }
     @Override
     public String toString() {

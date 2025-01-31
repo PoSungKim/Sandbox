@@ -5,6 +5,7 @@ import biz.ticket.Person;
 import biz.ticket.TicketStore;
 import biz.ticket.domain.Ticket;
 import biz.ticket.meta.STATUS;
+import fw.util.ApplicationLogger;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -53,7 +54,7 @@ public class Customer extends Person implements Runnable {
 
     @Override
     public void run() {
-        System.out.printf("\n[%s-current thread(%s)] BIZ : %s is running!\n", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")), Thread.currentThread().getName(), this);
+        ApplicationLogger.log(Thread.currentThread(), "BIZ", this);
         this.purchaseV3();
     }
 
