@@ -64,7 +64,7 @@ public class Market {
     }
     public void close() {
         System.out.printf("\n====================================================================================\n" +
-                "[%s-current thread(%s)] BIZ : %s is close!" +
+                "[%s-current thread(%s)] BIZ : %s is closed!" +
                 "\n====================================================================================\n", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")), Thread.currentThread().getName(), this.getClass().getSimpleName());
 //        ticketManager.checkForOpenTicket();
         new Thread(ticketManager).start();
