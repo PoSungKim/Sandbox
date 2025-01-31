@@ -48,6 +48,7 @@ public class Customer extends Person implements Runnable {
                 }
             }
         }
+
     }
 
     @Override

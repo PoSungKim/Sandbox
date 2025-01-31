@@ -21,6 +21,7 @@ public class TicketManager extends Person implements Runnable {
     public void checkForOpenTicket() {
         System.out.printf("%s %s is checking for open tickets!%n", this.getTitle(), this.getName());
         Long cnt = 0L;
+
         synchronized (Market.getInstance().getTicketStore()) {
             for (Ticket ticket : Market.getInstance().getTicketStore().getTickets()) {
                 if (ticket.getStatus().equals(STATUS.OPEN)) {

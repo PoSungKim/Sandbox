@@ -21,6 +21,7 @@ public class Market {
         this.add(new Customer(1L, "김보성"));
         this.add(new Customer(2L, "몽이"));
         this.add(new Customer(3L, "퐁이"));
+        this.add(new Customer(4L, "오렌지 고양이 레아"));
     }};
     private Market() {
         // prohibit instantiation by others
@@ -32,17 +33,18 @@ public class Market {
         return this.ticketStore;
     }
     public void open() {
-        System.out.println("\n====================================================================================");
-        System.out.printf("[%s-current thread(%s)] BIZ : %s is open!", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")), Thread.currentThread().getName(), this.getClass().getSimpleName());
-        System.out.println("\n====================================================================================");
+        System.out.printf("\n====================================================================================\n" +
+                "[%s-current thread(%s)] BIZ : %s is open!" +
+                "\n====================================================================================\n", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")), Thread.currentThread().getName(), this.getClass().getSimpleName());
 
         for(int i = 0; i < 10; i++) ticketManager.makeTicket();
         ticketManager.checkForOpenTicket();
     }
     public void run() {
-        System.out.println("\n====================================================================================");
-        System.out.printf("[%s-current thread(%s)] BIZ : %s is running!", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")), Thread.currentThread().getName(), this.getClass().getSimpleName());
-        System.out.println("\n====================================================================================");
+
+        System.out.printf("\n====================================================================================\n" +
+                "[%s-current thread(%s)] BIZ : %s is running!" +
+                "\n====================================================================================\n", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")), Thread.currentThread().getName(), this.getClass().getSimpleName());
 
         // 순차 처리
 //        for(Customer customer : customerList) {
@@ -53,12 +55,17 @@ public class Market {
         for(Customer customer : customerList) {
             Thread customerThread = new Thread(customer);
             customerThread.start();
+            try {
+                customerThread.join();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
     public void close() {
-        System.out.println("\n====================================================================================");
-        System.out.printf("[%s-current thread(%s)] BIZ : %s is close!", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")), Thread.currentThread().getName(), this.getClass().getSimpleName());
-        System.out.println("\n====================================================================================");
+        System.out.printf("\n====================================================================================\n" +
+                "[%s-current thread(%s)] BIZ : %s is close!" +
+                "\n====================================================================================\n", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")), Thread.currentThread().getName(), this.getClass().getSimpleName());
 //        ticketManager.checkForOpenTicket();
         new Thread(ticketManager).start();
     }
