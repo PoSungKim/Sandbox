@@ -34,6 +34,9 @@ public class TicketManager extends Person implements Runnable {
     public Long countCloseTicket() {
         return (long) Market.getInstance().getTicketStore().getTickets().stream().filter(ticket -> ticket.getStatus().equals(STATUS.CLOSE)).toList().size();
     }
+    public boolean isFinalTicketPurchased() {
+        return Market.getInstance().getTicketManager().countCloseTicket() == Market.getInstance().getCustomerList().size();
+    }
     @Override
     public String toString() {
         return super.getName() + " " + this.getTitle();

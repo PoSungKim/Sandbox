@@ -92,7 +92,7 @@ public class Customer extends Person implements Runnable {
         ApplicationLogger.log(Thread.currentThread(), "BIZ", this, "running");
         this.purchaseV4();
 
-        if (Market.getInstance().getTicketManager().countCloseTicket() == Market.getInstance().getCustomerList().size()) {
+        if (Market.getInstance().getTicketManager().isFinalTicketPurchased()) {
             Market.getInstance().closeMarket();
         }
     }
