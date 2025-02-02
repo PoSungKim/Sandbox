@@ -87,7 +87,7 @@ public class Market {
     public void closeMarket() {
         synchronized (Market.getInstance()) {
             ApplicationLogger.log(Thread.currentThread(), "BIZ", this, "closing!");
-            Market.getInstance().notifyAll();
+            Market.getInstance().notify();
         }
     }
     public void close() {
