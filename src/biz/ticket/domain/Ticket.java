@@ -3,9 +3,7 @@ package biz.ticket.domain;
 import biz.common.domain.BaseDomain;
 import biz.customer.domain.Customer;
 import biz.ticket.meta.STATUS;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import fw.util.ApplicationLogger;
 
 public class Ticket extends BaseDomain {
     private STATUS status;
@@ -17,8 +15,9 @@ public class Ticket extends BaseDomain {
     public STATUS getStatus() {
         return this.status;
     }
-    public synchronized void purchased(Customer owner) {
-        System.out.printf("[%s-current thread(%s)] BIZ : %s is purchased!\n", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")), Thread.currentThread().getName(), this);
+    public void purchased(Customer owner) {
+
+        ApplicationLogger.log(Thread.currentThread(), "BIZ", this, "purchased");
         this.owner = owner;
         this.status = STATUS.CLOSE;
         System.out.printf("%s is now closed\n\n", this);

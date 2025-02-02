@@ -30,6 +30,9 @@ public class TicketManager extends Person implements Runnable {
             }
         }
         System.out.printf("%s %s %s open!\n", cnt, cnt > 0 ? "tickets" : "ticket", cnt > 0 ? "are" : "is");
+
+        Market.getInstance().getTicketStore().getTickets()
+                .forEach(System.out::println);
     }
     @Override
     public String toString() {

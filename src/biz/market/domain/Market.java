@@ -5,16 +5,18 @@ import biz.ticket.meta.TITLE;
 import biz.ticket.TicketManager;
 import biz.ticket.TicketStore;
 import fw.annotation.BizObject;
+import fw.util.ApplicationLogger;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 @BizObject
 public class Market {
+    // Market is singleton, which takes a role of a single point of access to the instance of other code
     private static final Market  instance      = new Market();
     private final TicketManager  ticketManager = new TicketManager(1L, "자비스", TITLE.MANAGER);
+    // TicketStore is also singleton; however, it is not defined as a static variable
+    // The purpose is to maintain the relationship in which TicketStore can be accessed only through Market
     private final TicketStore    ticketStore   = new TicketStore(1L, "Airline Ticket Store");
     private final List<Customer> customerList  = new ArrayList<>(){{
         this.add(new Customer(0L, "이하은"));
@@ -30,21 +32,16 @@ public class Market {
         return instance;
     }
     public TicketStore getTicketStore() {
-        return this.ticketStore;
+        return ticketStore;
     }
     public void open() {
-        System.out.printf("\n====================================================================================\n" +
-                "[%s-current thread(%s)] BIZ : %s is open!" +
-                "\n====================================================================================\n", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")), Thread.currentThread().getName(), this.getClass().getSimpleName());
+        ApplicationLogger.log(Thread.currentThread(), "BIZ", this, "open");
 
         for(int i = 0; i < 10; i++) ticketManager.makeTicket();
         ticketManager.checkForOpenTicket();
     }
     public void run() {
-
-        System.out.printf("\n====================================================================================\n" +
-                "[%s-current thread(%s)] BIZ : %s is running!" +
-                "\n====================================================================================\n", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")), Thread.currentThread().getName(), this.getClass().getSimpleName());
+        ApplicationLogger.log(Thread.currentThread(), "BIZ", this, "running");
 
         // 순차 처리
         //for(Customer customer : customerList) {
@@ -54,23 +51,30 @@ public class Market {
         // 병렬 처리
         for(Customer customer : customerList) {
             Thread customerThread = new Thread(customer);
+            // default : false; true --> main 쓰레드가 종료되면 daemon 쓰레드도 모두 종료된다
+//            customerThread.setDaemon(true);
 
             customerThread.start();
-            try {
-                customerThread.join();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+//            try {
+//                // main 쓰레드는 customerThread.start() 연산이 끝날 때까지 대기한다
+//                // synchronous-blocking하게 작동한다
+//                // for문마다 새로운 Thread가 생성되기 때문에 멀티쓰레드이지만, 병렬처리는 안되고, 순차처리가 된다는 의미이다
+//                // main 쓰레드가 customerThread.start() 연산이 끝날 때까지 대기하지 않고, 바로 바로 nonblocking하게 작동하게 하기 위해서는 .join()를 사용하면 안된다
+//                customerThread.join();
+//
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
         }
     }
     public void close() {
-        System.out.printf("\n====================================================================================\n" +
-                "[%s-current thread(%s)] BIZ : %s is closed!" +
-                "\n====================================================================================\n", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")), Thread.currentThread().getName(), this.getClass().getSimpleName());
-        this.ticketManager.checkForOpenTicket();
+        ApplicationLogger.log(Thread.currentThread(), "BIZ", this, "closed");
+
+        ticketManager.checkForOpenTicket();
     }
     @Override
     public String toString() {
-        return String.format("%s(ticketManager : %s, ticketStore : %s, customerList : %s)", this.getClass().getSimpleName(), this.ticketManager, this.ticketStore, this.customerList);
+        return this.getClass().getSimpleName();
+//        return String.format("%s(ticketManager : %s, ticketStore : %s, customerList : %s)", this.getClass().getSimpleName(), this.ticketManager, this.ticketStore, this.customerList);
     }
 }
