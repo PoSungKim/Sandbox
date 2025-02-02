@@ -34,6 +34,9 @@ public class Market {
     public TicketStore getTicketStore() {
         return ticketStore;
     }
+    public List<Customer> getcustomerList() {
+        return customerList;
+    }
     public void open() {
         ApplicationLogger.log(Thread.currentThread(), "BIZ", this, "open");
 
@@ -66,7 +69,28 @@ public class Market {
 //                throw new RuntimeException(e);
 //            }
         }
+
+        Market.getInstance().stopMarket();
     }
+
+    public void stopMarket() {
+        synchronized (Market.getInstance()) {
+            try {
+                System.out.println("WAIT!");
+                Market.getInstance().wait();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void finishMarket() {
+        synchronized (Market.getInstance()) {
+            System.out.println("NOTIFYALL!");
+            Market.getInstance().notifyAll();
+        }
+    }
+
     public void close() {
         ApplicationLogger.log(Thread.currentThread(), "BIZ", this, "closed");
 

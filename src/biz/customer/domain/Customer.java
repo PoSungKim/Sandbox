@@ -72,6 +72,11 @@ public class Customer extends Person implements Runnable {
                     System.out.printf("%s %s has found and is purchasing %s\n", this.getClass().getSimpleName(), this.getName(), ticket);
                     sleep();
                     ticket.purchased(this);
+
+                    if (ticket.getId() == Market.getInstance().getcustomerList().size() - 1) {
+                        Market.getInstance().finishMarket();
+                    }
+
                     break;
                 }
             }
