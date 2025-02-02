@@ -68,15 +68,9 @@ public class Customer extends Person implements Runnable {
                     if (ticket.getStatus().equals(STATUS.CLOSE)) {
                         continue;
                     }
-
                     System.out.printf("%s %s has found and is purchasing %s\n", this.getClass().getSimpleName(), this.getName(), ticket);
                     sleep();
                     ticket.purchased(this);
-
-                    if (ticket.getId() == Market.getInstance().getcustomerList().size() - 1) {
-                        Market.getInstance().finishMarket();
-                    }
-
                     break;
                 }
             }
@@ -97,6 +91,10 @@ public class Customer extends Person implements Runnable {
     public void run() {
         ApplicationLogger.log(Thread.currentThread(), "BIZ", this, "running");
         this.purchaseV4();
+
+        if (Market.getInstance().getTicketManager().countCloseTicket() == Market.getInstance().getCustomerList().size()) {
+            Market.getInstance().closeMarket();
+        }
     }
 
     @Override

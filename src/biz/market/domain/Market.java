@@ -34,8 +34,11 @@ public class Market {
     public TicketStore getTicketStore() {
         return ticketStore;
     }
-    public List<Customer> getcustomerList() {
+    public List<Customer> getCustomerList() {
         return customerList;
+    }
+    public TicketManager getTicketManager() {
+        return ticketManager;
     }
     public void open() {
         ApplicationLogger.log(Thread.currentThread(), "BIZ", this, "open");
@@ -69,31 +72,26 @@ public class Market {
 //                throw new RuntimeException(e);
 //            }
         }
-
-        Market.getInstance().stopMarket();
+        Market.getInstance().standByMarket();
     }
-
-    public void stopMarket() {
+    public void standByMarket() {
         synchronized (Market.getInstance()) {
             try {
-                System.out.println("WAIT!");
+                ApplicationLogger.log(Thread.currentThread(), "BIZ", this, "standing by!");
                 Market.getInstance().wait();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
     }
-
-    public void finishMarket() {
+    public void closeMarket() {
         synchronized (Market.getInstance()) {
-            System.out.println("NOTIFYALL!");
+            ApplicationLogger.log(Thread.currentThread(), "BIZ", this, "closing!");
             Market.getInstance().notifyAll();
         }
     }
-
     public void close() {
         ApplicationLogger.log(Thread.currentThread(), "BIZ", this, "closed");
-
         ticketManager.checkForOpenTicket();
     }
     @Override
